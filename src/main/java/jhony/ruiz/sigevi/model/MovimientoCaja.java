@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Entity
 @AllArgsConstructor
@@ -20,9 +22,9 @@ public class MovimientoCaja {
 
     private String concepto;
 
-    private String monto;
+    private Double monto;
 
-    private boolean fecha;
+    private LocalDateTime fecha;
 
     @Enumerated(EnumType.STRING)
     private TipoMovimientoCaja tipoMovimientoCaja;
