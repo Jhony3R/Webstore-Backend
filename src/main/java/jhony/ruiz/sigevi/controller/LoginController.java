@@ -18,7 +18,7 @@ public class LoginController {
     private final JwtUserDetailsService jwtUserDetailsService;
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest req) throws Exception {
+    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest req) {
         return ResponseEntity.ok(jwtUserDetailsService.login(req));
     }
 }

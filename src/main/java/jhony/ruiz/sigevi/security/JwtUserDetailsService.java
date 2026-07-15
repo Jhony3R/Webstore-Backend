@@ -1,5 +1,7 @@
 package jhony.ruiz.sigevi.security;
 
+import jhony.ruiz.sigevi.exception.InvalidCredentialsException;
+import jhony.ruiz.sigevi.exception.UserDisabledException;
 import jhony.ruiz.sigevi.model.Usuario;
 import jhony.ruiz.sigevi.repository.IUsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,16 +44,16 @@ public class JwtUserDetailsService implements UserDetailsService {
         );
     }
 
-    public JwtResponse login(JwtRequest jwtRequest) throws Exception {
+    public JwtResponse login(JwtRequest jwtRequest) {
         Usuario usuario = repo.findByUsername(jwtRequest.getUsername())
-                .orElseThrow(() -> new Exception("INVALID_CREDENTIALS"));
+                .orElseThrow(() -> new InvalidCredentialsException("INVALID_CREDENTIALS"));
 
         if (!usuario.isActivo()) {
-            throw new Exception("USER_DISABLED");
+            throw new UserDisabledException("USER_DISABLED");
         }
 
         if (!passwordEncoder.matches(jwtRequest.getPassword(), usuario.getPassword())) {
-            throw new Exception("INVALID_CREDENTIALS");
+            throw new InvalidCredentialsException("INVALID_CREDENTIALS");
         }
 
         final UserDetails userDetails = loadUserByUsername(jwtRequest.getUsername());

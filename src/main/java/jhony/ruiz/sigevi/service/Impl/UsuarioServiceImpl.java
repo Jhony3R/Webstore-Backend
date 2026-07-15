@@ -16,4 +16,18 @@ public class UsuarioServiceImpl extends CRUDImpl<Usuario, Integer> implements IU
     protected IGenericRepo<Usuario, Integer> getRepo() {
         return usuarioRepository;
     }
+
+    @Override
+    public void desactivar(Integer id) {
+        Usuario usuario = findById(id);
+        usuario.setActivo(false);
+        usuarioRepository.save(usuario);
+    }
+
+    @Override
+    public void reactivar(Integer id) {
+        Usuario usuario = findById(id);
+        usuario.setActivo(true);
+        usuarioRepository.save(usuario);
+    }
 }

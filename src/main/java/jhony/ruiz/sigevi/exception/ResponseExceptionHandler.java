@@ -43,20 +43,6 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
   }
 
-  @ExceptionHandler(InsufficientStockException.class)
-  public ResponseEntity<CustomErrorResponse> handleInsufficientStockException(InsufficientStockException ex, WebRequest request) {
-    CustomErrorResponse err = new CustomErrorResponse(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
-
-    return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
-  }
-
-    /*@ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<CustomErrorResponse> handleBadRequest(MethodArgumentNotValidException ex, WebRequest request) {
-        CustomErrorResponse err = new CustomErrorResponse(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
-
-        return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
-    }*/
-
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
     String msg = ex.getBindingResult().getFieldErrors().stream()
