@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -86,5 +87,10 @@ public class CajaServiceImpl extends CRUDImpl<Caja, Integer> implements ICajaSer
     public Caja buscarCajaAbiertaDeUsuario(String username) {
         return cajaRepository.findByEstadoCajaAndUsuarioUsername(EstadoCaja.ABIERTA, username)
                 .orElse(null);
+    }
+
+    @Override
+    public List<Caja> buscarCajasDeUsuario(String username) {
+        return cajaRepository.findByUsuarioUsername(username);
     }
 }

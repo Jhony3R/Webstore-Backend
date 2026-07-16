@@ -1,5 +1,8 @@
 package jhony.ruiz.sigevi.service.Impl;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import jhony.ruiz.sigevi.dto.Venta.DetalleVentaRequestDTO;
 import jhony.ruiz.sigevi.dto.VentaRequestDTO;
 import jhony.ruiz.sigevi.exception.*;
@@ -13,6 +16,10 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -215,6 +222,10 @@ public class VentaServiceImpl extends CRUDImpl<Venta, Integer> implements IVenta
             InputStream jrxmlStream = new ClassPathResource("reports/comprobante_venta.jrxml").getInputStream();
             JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlStream);
 
+            String contenidoQr = "Comprobante: " + venta.getNumeroComprobante()
+                    + " | Fecha: " + venta.getFecha().format(FORMATO_FECHA)
+                    + " | Total: S/ " + String.format("%.2f", venta.getTotal());
+
             Map<String, Object> params = new HashMap<>();
             params.put("numeroComprobante", venta.getNumeroComprobante());
             params.put("fecha", venta.getFecha().format(FORMATO_FECHA));
@@ -223,6 +234,8 @@ public class VentaServiceImpl extends CRUDImpl<Venta, Integer> implements IVenta
             params.put("subTotal", String.format("%.2f", venta.getSubTotal()));
             params.put("valorDescuento", String.format("%.2f", venta.getValorDescuento()));
             params.put("total", String.format("%.2f", venta.getTotal()));
+            params.put("vendedorNombre", nombreVendedorParaComprobante(venta));
+            params.put("qrCode", generarCodigoQr(contenidoQr, 150));
 
             List<Map<String, Object>> detalleData = venta.getDetalles().stream()
                     .map(this::mapDetalle)
@@ -239,6 +252,15 @@ public class VentaServiceImpl extends CRUDImpl<Venta, Integer> implements IVenta
         } catch (Exception e) {
             throw new RuntimeException("Error al generar el comprobante PDF: " + e.getMessage(), e);
         }
+    }
+
+    private String nombreVendedorParaComprobante(Venta venta) {
+        if (venta.getUsuario() == null) {
+            return "N/D";
+        }
+        return venta.getUsuario().getNombreCompleto() != null
+                ? venta.getUsuario().getNombreCompleto()
+                : venta.getUsuario().getUsername();
     }
 
     private String nombreClienteParaComprobante(Venta venta) {
@@ -271,5 +293,21 @@ public class VentaServiceImpl extends CRUDImpl<Venta, Integer> implements IVenta
 
         int margenInferior = 15;
         jasperPrint.setPageHeight(altoContenido + margenInferior);
+    }
+
+    private InputStream generarCodigoQr(String contenido, int size) throws Exception {
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(contenido, BarcodeFormat.QR_CODE, size, size);
+
+        BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                image.setRGB(x, y, bitMatrix.get(x, y) ? 0xFF000000 : 0xFFFFFFFF);
+            }
+        }
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(image, "PNG", baos);
+        return new ByteArrayInputStream(baos.toByteArray());
     }
 }

@@ -9,6 +9,7 @@ import jhony.ruiz.sigevi.service.ICajaService;
 import jhony.ruiz.sigevi.util.MapperUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +26,16 @@ public class CajaController {
     private final MapperUtil mapperUtil;
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<List<CajaDTO>> findAll() {
         List<CajaDTO> list = mapperUtil.mapList(cajaService.findAll(), CajaDTO.class);
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/mis-cajas")
+    public ResponseEntity<List<CajaDTO>> misCajas(Authentication authentication) {
+        List<CajaDTO> list = mapperUtil.mapList(
+                cajaService.buscarCajasDeUsuario(authentication.getName()), CajaDTO.class);
         return ResponseEntity.ok(list);
     }
 

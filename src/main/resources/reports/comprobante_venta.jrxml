@@ -18,6 +18,8 @@
     <parameter name="subTotal"          class="java.lang.String"/>
     <parameter name="valorDescuento"    class="java.lang.String"/>
     <parameter name="total"             class="java.lang.String"/>
+    <parameter name="vendedorNombre"    class="java.lang.String"/>
+    <parameter name="qrCode"            class="java.io.InputStream"/>
 
     <!-- CAMPOS -->
     <field name="descripcion"     class="java.lang.String"/>
@@ -28,7 +30,7 @@
     <background splitType="Stretch"/>
 
     <!-- CABECERA -->
-    <pageHeader height="95" splitType="Stretch">
+    <pageHeader height="107" splitType="Stretch">
 
         <element kind="line" uuid="aa100001-0000-0000-0000-000000000001"
                  x="0" y="0" width="207" height="1">
@@ -70,8 +72,15 @@
             <expression><![CDATA["Pago: " + $P{metodoPago}]]></expression>
         </element>
 
+        <element kind="textField" uuid="aa100008-0000-0000-0000-000000000008"
+                 x="0" y="65" width="207" height="11"
+                 fontName="SansSerif" fontSize="7.0"
+                 blankWhenNull="true" hTextAlign="Left" vTextAlign="Middle">
+            <expression><![CDATA["Atendido por: " + $P{vendedorNombre}]]></expression>
+        </element>
+
         <element kind="line" uuid="aa100007-0000-0000-0000-000000000007"
-                 positionType="Float" x="0" y="70" width="207" height="1">
+                 positionType="Float" x="0" y="82" width="207" height="1">
             <pen lineStyle="Dashed"/>
         </element>
 
@@ -137,7 +146,7 @@
     </detail>
 
     <!-- PIE -->
-    <summary height="65" splitType="Stretch">
+    <summary height="155" splitType="Stretch">
 
         <element kind="line" uuid="dd100001-0000-0000-0000-000000000001"
                  x="0" y="3" width="207" height="1">
@@ -165,8 +174,20 @@
             <expression><![CDATA["TOTAL: S/ " + $P{total}]]></expression>
         </element>
 
+        <element kind="image" uuid="dd100006-0000-0000-0000-000000000006"
+                 x="66" y="56" width="75" height="75">
+            <expression><![CDATA[$P{qrCode}]]></expression>
+        </element>
+
+        <element kind="staticText" uuid="dd100007-0000-0000-0000-000000000007"
+                 x="0" y="133" width="207" height="10"
+                 fontName="SansSerif" fontSize="6.0"
+                 hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Escanea el código para verificar]]></text>
+        </element>
+
         <element kind="staticText" uuid="dd100005-0000-0000-0000-000000000005"
-                 x="0" y="52" width="207" height="10"
+                 x="0" y="143" width="207" height="10"
                  fontName="SansSerif" fontSize="6.0" italic="true"
                  hTextAlign="Center" vTextAlign="Middle">
             <text><![CDATA[Documento interno, sin valor tributario]]></text>
