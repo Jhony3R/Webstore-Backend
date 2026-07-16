@@ -129,6 +129,12 @@
 			<artifactId>jasperreports-pdf</artifactId>
 			<version>7.0.3</version>
 		</dependency>
+		<!--  Excell *  -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>5.3.0</version>
+		</dependency>
 		<!--  QR *  -->
 		<dependency>
 			<groupId>com.google.zxing</groupId>
