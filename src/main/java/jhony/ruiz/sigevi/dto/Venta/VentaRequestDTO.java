@@ -17,7 +17,6 @@ import java.util.List;
 @NoArgsConstructor
 public class VentaRequestDTO {
 
-    @NotNull(message = "El cliente es obligatorio")
     private Integer idCliente;
 
     @NotNull(message = "El método de pago es obligatorio")

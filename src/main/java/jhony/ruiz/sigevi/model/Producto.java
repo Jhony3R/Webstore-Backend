@@ -41,5 +41,9 @@ public class Producto {
     private boolean activo;
 
     private LocalDateTime fechaCreacion;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_categoria")
+    private Categoria categoria;
 }
 

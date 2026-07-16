@@ -1,0 +1,177 @@
+<jasperReport name="comprobante_venta" language="java"
+              pageWidth="227" pageHeight="3000"
+              columnWidth="207" leftMargin="10" rightMargin="10"
+              topMargin="3" bottomMargin="3"
+              ignorePagination="true"
+              floatColumnFooter="true"
+              whenNoDataType="AllSectionsNoDetail"
+              uuid="c1d2e3f4-a5b6-4890-abcd-ef1234567891">
+
+    <property name="com.jaspersoft.studio.unit." value="pixel"/>
+    <property name="net.sf.jasperreports.export.pdf.force.svg.shapes" value="false"/>
+
+    <!-- PARÁMETROS -->
+    <parameter name="numeroComprobante" class="java.lang.String"/>
+    <parameter name="fecha"             class="java.lang.String"/>
+    <parameter name="clienteNombre"     class="java.lang.String"/>
+    <parameter name="metodoPago"        class="java.lang.String"/>
+    <parameter name="subTotal"          class="java.lang.String"/>
+    <parameter name="valorDescuento"    class="java.lang.String"/>
+    <parameter name="total"             class="java.lang.String"/>
+
+    <!-- CAMPOS -->
+    <field name="descripcion"     class="java.lang.String"/>
+    <field name="cantidad"        class="java.lang.Integer"/>
+    <field name="precioUnitario"  class="java.lang.Double"/>
+    <field name="subtotal"        class="java.lang.Double"/>
+
+    <background splitType="Stretch"/>
+
+    <!-- CABECERA -->
+    <pageHeader height="95" splitType="Stretch">
+
+        <element kind="line" uuid="aa100001-0000-0000-0000-000000000001"
+                 x="0" y="0" width="207" height="1">
+            <pen lineWidth="1.5"/>
+        </element>
+
+        <element kind="staticText" uuid="aa100002-0000-0000-0000-000000000002"
+                 x="0" y="3" width="207" height="16"
+                 fontName="SansSerif" fontSize="12.0" bold="true"
+                 hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Importaciones K y R]]></text>
+        </element>
+
+        <element kind="textField" uuid="aa100003-0000-0000-0000-000000000003"
+                 x="0" y="21" width="207" height="14"
+                 fontName="SansSerif" fontSize="10.0" bold="true"
+                 blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+            <expression><![CDATA["Comprobante: " + $P{numeroComprobante}]]></expression>
+        </element>
+
+        <element kind="textField" uuid="aa100004-0000-0000-0000-000000000004"
+                 x="0" y="37" width="207" height="14"
+                 fontName="SansSerif" fontSize="8.0"
+                 blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+            <expression><![CDATA["Fecha: " + $P{fecha}]]></expression>
+        </element>
+
+        <element kind="textField" uuid="aa100005-0000-0000-0000-000000000005"
+                 x="0" y="53" width="130" height="11"
+                 fontName="SansSerif" fontSize="7.0"
+                 blankWhenNull="true" hTextAlign="Left" vTextAlign="Middle">
+            <expression><![CDATA["Cliente: " + $P{clienteNombre}]]></expression>
+        </element>
+
+        <element kind="textField" uuid="aa100006-0000-0000-0000-000000000006"
+                 x="130" y="53" width="77" height="11"
+                 fontName="SansSerif" fontSize="7.0"
+                 blankWhenNull="true" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA["Pago: " + $P{metodoPago}]]></expression>
+        </element>
+
+        <element kind="line" uuid="aa100007-0000-0000-0000-000000000007"
+                 positionType="Float" x="0" y="70" width="207" height="1">
+            <pen lineStyle="Dashed"/>
+        </element>
+
+    </pageHeader>
+
+    <!-- ENCABEZADO COLUMNAS -->
+    <columnHeader height="14" splitType="Stretch">
+
+        <element kind="staticText" uuid="bb100001-0000-0000-0000-000000000001"
+                 x="0" y="1" width="100" height="10"
+                 fontName="SansSerif" fontSize="7.0" bold="true"
+                 hTextAlign="Left" vTextAlign="Middle">
+            <text><![CDATA[PRODUCTO]]></text>
+        </element>
+
+        <element kind="staticText" uuid="bb100002-0000-0000-0000-000000000002"
+                 x="100" y="1" width="30" height="10"
+                 fontName="SansSerif" fontSize="7.0" bold="true"
+                 hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[CANT.]]></text>
+        </element>
+
+        <element kind="staticText" uuid="bb100003-0000-0000-0000-000000000003"
+                 x="130" y="1" width="77" height="10"
+                 fontName="SansSerif" fontSize="7.0" bold="true"
+                 hTextAlign="Right" vTextAlign="Middle">
+            <text><![CDATA[SUBTOTAL]]></text>
+        </element>
+
+        <element kind="line" uuid="bb100004-0000-0000-0000-000000000004"
+                 x="0" y="12" width="207" height="1">
+            <pen lineStyle="Dashed"/>
+        </element>
+
+    </columnHeader>
+
+    <!-- DETALLE -->
+    <detail>
+        <band height="15" splitType="Stretch">
+
+            <element kind="textField" uuid="cc100001-0000-0000-0000-000000000001"
+                     x="0" y="1" width="100" height="13"
+                     fontName="SansSerif" fontSize="8.0"
+                     textAdjust="StretchHeight" blankWhenNull="true" vTextAlign="Middle">
+                <expression><![CDATA[$F{descripcion}]]></expression>
+            </element>
+
+            <element kind="textField" uuid="cc100002-0000-0000-0000-000000000002"
+                     x="100" y="1" width="30" height="13"
+                     fontName="SansSerif" fontSize="8.0"
+                     blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{cantidad}]]></expression>
+            </element>
+
+            <element kind="textField" uuid="cc100003-0000-0000-0000-000000000003"
+                     x="130" y="1" width="77" height="13"
+                     fontName="SansSerif" fontSize="8.0" pattern="S/ #,##0.00"
+                     blankWhenNull="true" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$F{subtotal}]]></expression>
+            </element>
+
+        </band>
+    </detail>
+
+    <!-- PIE -->
+    <summary height="65" splitType="Stretch">
+
+        <element kind="line" uuid="dd100001-0000-0000-0000-000000000001"
+                 x="0" y="3" width="207" height="1">
+            <pen lineStyle="Dashed"/>
+        </element>
+
+        <element kind="textField" uuid="dd100002-0000-0000-0000-000000000002"
+                 x="0" y="8" width="207" height="12"
+                 fontName="SansSerif" fontSize="8.0"
+                 blankWhenNull="true" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA["Subtotal: S/ " + $P{subTotal}]]></expression>
+        </element>
+
+        <element kind="textField" uuid="dd100003-0000-0000-0000-000000000003"
+                 x="0" y="21" width="207" height="12"
+                 fontName="SansSerif" fontSize="8.0"
+                 blankWhenNull="true" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA["Descuento: S/ " + $P{valorDescuento}]]></expression>
+        </element>
+
+        <element kind="textField" uuid="dd100004-0000-0000-0000-000000000004"
+                 x="0" y="35" width="207" height="15"
+                 fontName="SansSerif" fontSize="11.0" bold="true"
+                 blankWhenNull="true" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA["TOTAL: S/ " + $P{total}]]></expression>
+        </element>
+
+        <element kind="staticText" uuid="dd100005-0000-0000-0000-000000000005"
+                 x="0" y="52" width="207" height="10"
+                 fontName="SansSerif" fontSize="6.0" italic="true"
+                 hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Documento interno, sin valor tributario]]></text>
+        </element>
+
+    </summary>
+
+</jasperReport>

@@ -33,5 +33,9 @@ public class ProductoDTO {
     private boolean activo;
 
     private LocalDateTime fechaCreacion;
+
+    private Integer idCategoria;
+
+    private String nombreCategoria;
 }
 

@@ -33,11 +33,18 @@ public class ClienteController {
         return ResponseEntity.ok(mapperUtil.map(obj, ClienteDTO.class));
     }
 
+    @GetMapping("/documento/{numeroDocumento}")
+    public ResponseEntity<ClienteDTO> findByNumeroDocumento(@PathVariable String numeroDocumento) {
+        return clienteService.findByNumeroDocumento(numeroDocumento)
+                .map(cliente -> ResponseEntity.ok(mapperUtil.map(cliente, ClienteDTO.class)))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
-    public ResponseEntity<Void> save(@Valid @RequestBody ClienteDTO dto) {
+    public ResponseEntity<ClienteDTO> save(@Valid @RequestBody ClienteDTO dto) {
         Cliente obj = clienteService.save(mapperUtil.map(dto, Cliente.class));
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getIdCliente()).toUri();
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).body(mapperUtil.map(obj, ClienteDTO.class));
     }
 
     @PutMapping("/{id}")

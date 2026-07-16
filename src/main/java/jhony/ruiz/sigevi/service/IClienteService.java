@@ -2,6 +2,8 @@ package jhony.ruiz.sigevi.service;
 
 import jhony.ruiz.sigevi.model.Cliente;
 
-public interface IClienteService extends ICRUD<Cliente, Integer> {
+import java.util.Optional;
 
+public interface IClienteService extends ICRUD<Cliente, Integer> {
+    Optional<Cliente> findByNumeroDocumento(String numeroDocumento);
 }

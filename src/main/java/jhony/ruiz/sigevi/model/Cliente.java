@@ -20,6 +20,7 @@ public class Cliente {
     @EqualsAndHashCode.Include
     private Integer idCliente;
 
+    @Column(unique = true)
     private String numeroDocumento;
 
     private String nombres;

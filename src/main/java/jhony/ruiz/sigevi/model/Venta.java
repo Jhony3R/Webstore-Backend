@@ -45,7 +45,7 @@ public class Venta {
     private EstadoVenta estadoVenta;
 
     @ManyToOne
-    @JoinColumn(name = "id_cliente", nullable = false)
+    @JoinColumn(name = "id_cliente")
     private Cliente cliente;
 
     @ManyToOne

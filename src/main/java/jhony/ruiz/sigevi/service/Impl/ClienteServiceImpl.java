@@ -7,6 +7,8 @@ import jhony.ruiz.sigevi.service.IClienteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ClienteServiceImpl extends CRUDImpl<Cliente, Integer> implements IClienteService {
@@ -15,5 +17,10 @@ public class ClienteServiceImpl extends CRUDImpl<Cliente, Integer> implements IC
     @Override
     protected IGenericRepo<Cliente, Integer> getRepo() {
         return clienteRepository;
+    }
+
+    @Override
+    public Optional<Cliente> findByNumeroDocumento(String numeroDocumento) {
+        return clienteRepository.findByNumeroDocumento(numeroDocumento);
     }
 }
