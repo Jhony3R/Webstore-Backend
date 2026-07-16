@@ -1,12 +1,15 @@
 package jhony.ruiz.sigevi.controller;
 
 import jakarta.validation.Valid;
+import jhony.ruiz.sigevi.dto.AperturaCajaRequestDTO;
 import jhony.ruiz.sigevi.dto.CajaDTO;
+import jhony.ruiz.sigevi.dto.CierreCajaRequestDTO;
 import jhony.ruiz.sigevi.model.Caja;
 import jhony.ruiz.sigevi.service.ICajaService;
 import jhony.ruiz.sigevi.util.MapperUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -33,18 +36,30 @@ public class CajaController {
         return ResponseEntity.ok(mapperUtil.map(obj, CajaDTO.class));
     }
 
-    @PostMapping
-    public ResponseEntity<Void> save(@Valid @RequestBody CajaDTO dto) {
-        Caja obj = cajaService.save(mapperUtil.map(dto, Caja.class));
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getIdCaja()).toUri();
-        return ResponseEntity.created(location).build();
+    @GetMapping("/mi-caja-abierta")
+    public ResponseEntity<CajaDTO> miCajaAbierta(Authentication authentication) {
+        Caja caja = cajaService.buscarCajaAbiertaDeUsuario(authentication.getName());
+        if (caja == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(mapperUtil.map(caja, CajaDTO.class));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CajaDTO> update(@Valid @PathVariable("id") Integer id, @RequestBody CajaDTO dto) {
-        dto.setIdCaja(id);
-        Caja obj = cajaService.update(id, mapperUtil.map(dto, Caja.class));
-        return ResponseEntity.ok(mapperUtil.map(obj, CajaDTO.class));
+    @PostMapping("/aperturar")
+    public ResponseEntity<CajaDTO> aperturar(@Valid @RequestBody AperturaCajaRequestDTO dto, Authentication authentication) {
+        Caja caja = cajaService.aperturarCaja(authentication.getName(), dto.getSaldoInicial());
+        CajaDTO cajaDTO = mapperUtil.map(caja, CajaDTO.class);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .replacePath("/api/caja/{id}")
+                .buildAndExpand(caja.getIdCaja())
+                .toUri();
+        return ResponseEntity.created(location).body(cajaDTO);
+    }
+
+    @PostMapping("/cerrar")
+    public ResponseEntity<CajaDTO> cerrar(@Valid @RequestBody CierreCajaRequestDTO dto, Authentication authentication) {
+        Caja caja = cajaService.cerrarCaja(authentication.getName(), dto.getEfectivoContado(), dto.getObservacionDescuadre());
+        return ResponseEntity.ok(mapperUtil.map(caja, CajaDTO.class));
     }
 
     @DeleteMapping("/{id}")

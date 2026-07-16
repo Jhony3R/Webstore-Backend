@@ -16,8 +16,6 @@ public class DetalleVentaDTO {
 
     private Double subTotal;
 
-    private VentaDTO venta;
-
     private ProductoDTO producto;
 
 

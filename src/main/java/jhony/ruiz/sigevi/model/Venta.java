@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -55,6 +56,7 @@ public class Venta {
     @JoinColumn(name = "id_caja", nullable = false)
     private Caja caja;
 
-
+    @OneToMany(mappedBy="venta",cascade=CascadeType.ALL)
+    private List<DetalleVenta> detalles;
 }
 

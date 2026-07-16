@@ -44,5 +44,10 @@ public class Caja {
     private LocalDateTime fechaApertura;
 
     private LocalDateTime fechaCierre;
+
+    @ManyToOne
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Usuario usuario;
+
 }
 

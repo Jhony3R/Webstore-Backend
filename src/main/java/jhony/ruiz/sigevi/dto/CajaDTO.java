@@ -1,5 +1,6 @@
 package jhony.ruiz.sigevi.dto;
 import jhony.ruiz.sigevi.model.EstadoCaja;
+import jhony.ruiz.sigevi.model.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,4 +36,6 @@ public class CajaDTO {
     private LocalDateTime fechaApertura;
 
     private LocalDateTime fechaCierre;
+
+    private UsuarioDTO usuario;
 }

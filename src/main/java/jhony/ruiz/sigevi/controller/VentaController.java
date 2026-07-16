@@ -2,11 +2,13 @@ package jhony.ruiz.sigevi.controller;
 
 import jakarta.validation.Valid;
 import jhony.ruiz.sigevi.dto.VentaDTO;
+import jhony.ruiz.sigevi.dto.VentaRequestDTO;
 import jhony.ruiz.sigevi.model.Venta;
 import jhony.ruiz.sigevi.service.IVentaService;
 import jhony.ruiz.sigevi.util.MapperUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -33,18 +35,15 @@ public class VentaController {
         return ResponseEntity.ok(mapperUtil.map(obj, VentaDTO.class));
     }
 
-    @PostMapping
-    public ResponseEntity<Void> save(@Valid @RequestBody VentaDTO dto) {
-        Venta obj = ventaService.save(mapperUtil.map(dto, Venta.class));
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getIdVenta()).toUri();
-        return ResponseEntity.created(location).build();
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<VentaDTO> update(@Valid @PathVariable("id") Integer id, @RequestBody VentaDTO dto) {
-        dto.setIdVenta(id);
-        Venta obj = ventaService.update(id, mapperUtil.map(dto, Venta.class));
-        return ResponseEntity.ok(mapperUtil.map(obj, VentaDTO.class));
+    @PostMapping("/registrar")
+    public ResponseEntity<VentaDTO> registrarVenta(@Valid @RequestBody VentaRequestDTO requestDTO, Authentication authentication) {
+        Venta ventaGuardada = ventaService.registrarVenta(authentication.getName(), requestDTO);
+        VentaDTO dto = mapperUtil.map(ventaGuardada, VentaDTO.class);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .replacePath("/api/venta/{id}")
+                .buildAndExpand(ventaGuardada.getIdVenta())
+                .toUri();
+        return ResponseEntity.created(location).body(dto);
     }
 
     @DeleteMapping("/{id}")

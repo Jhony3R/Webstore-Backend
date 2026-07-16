@@ -16,8 +16,6 @@ import java.time.LocalDateTime;
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    // JsonMapper es inmutable y thread-safe: se crea una sola vez.
-    // No necesitas inyectarlo, JsonMapper.builder() ya trae buenos defaults.
     private static final JsonMapper jsonMapper = JsonMapper.builder().build();
 
     @Override
