@@ -48,20 +48,17 @@ public class WebSecurityConfig {
     http
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(AbstractHttpConfigurer::disable)
-
             .sessionManagement(session -> session
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
-
             .authorizeHttpRequests(req -> req
+                    .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                     .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                     .requestMatchers("/api/auth/login").permitAll()
                     .anyRequest().authenticated()
             )
-
             .formLogin(AbstractHttpConfigurer::disable)
             .httpBasic(AbstractHttpConfigurer::disable)
-
             .exceptionHandling(e -> e.authenticationEntryPoint(jwtAuthenticationEntryPoint));
 
     http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
@@ -72,10 +69,14 @@ public class WebSecurityConfig {
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+    configuration.setAllowedOrigins(List.of(
+            "http://localhost:4200",
+            "https://jhony3r.github.io"
+    ));
     configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
     configuration.setAllowedHeaders(List.of(
-            "Authorization", "Cache-Control", "Content-Type", "X-Requested-With", "Accept", "Origin"
+            "Authorization", "Cache-Control", "Content-Type", "X-Requested-With", "Accept", "Origin",
+            "ngrok-skip-browser-warning"
     ));
     configuration.setExposedHeaders(List.of("Authorization"));
     configuration.setAllowCredentials(true);
