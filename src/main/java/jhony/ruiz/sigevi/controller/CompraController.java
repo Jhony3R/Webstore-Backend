@@ -1,7 +1,9 @@
 package jhony.ruiz.sigevi.controller;
 
 import jakarta.validation.Valid;
+import jhony.ruiz.sigevi.dto.Compra.CompraRequestDTO;
 import jhony.ruiz.sigevi.dto.CompraDTO;
+import jhony.ruiz.sigevi.exception.Recursonoencontradoexception;
 import jhony.ruiz.sigevi.model.Compra;
 import jhony.ruiz.sigevi.service.ICompraService;
 import jhony.ruiz.sigevi.util.MapperUtil;
@@ -31,6 +33,19 @@ public class CompraController {
     public ResponseEntity<CompraDTO> findById(@PathVariable("id") Integer id) {
         Compra obj = compraService.findById(id);
         return ResponseEntity.ok(mapperUtil.map(obj, CompraDTO.class));
+    }
+
+    @PostMapping("/registrar")
+    public ResponseEntity<?> registrarCompra(@Valid @RequestBody CompraRequestDTO dto) {
+        try {
+            CompraDTO compra = compraService.registrarCompra(dto);
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .replacePath("/api/compra/{id}")
+                    .buildAndExpand(compra.getIdCompra()).toUri();
+            return ResponseEntity.created(location).body(compra);
+        } catch (Recursonoencontradoexception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     @PostMapping

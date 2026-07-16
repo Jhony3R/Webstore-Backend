@@ -9,4 +9,5 @@ public class UsuarioRequest {
     private String nombreCompleto;
     private String email;
     private RolUsuario rol;
+    private boolean activo;
 }

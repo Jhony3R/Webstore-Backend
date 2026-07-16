@@ -1,4 +1,6 @@
-package jhony.ruiz.sigevi.dto;
+package jhony.ruiz.sigevi.dto.AjusteInventario;
+import jhony.ruiz.sigevi.dto.ProductoDTO;
+import jhony.ruiz.sigevi.dto.UsuarioDTO;
 import jhony.ruiz.sigevi.model.TipoAjusteInventario;
 import lombok.AllArgsConstructor;
 import lombok.Data;

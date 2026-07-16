@@ -25,7 +25,12 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             exceptionMsg = "Token no encontrado o inválido";
         }
 
-        CustomErrorResponse errorResponse = new CustomErrorResponse(LocalDateTime.now(), exceptionMsg, request.getRequestURI());
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now(),
+                exceptionMsg,
+                request.getRequestURI(),
+                "UNAUTHORIZED"
+        );
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);

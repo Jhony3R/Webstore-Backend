@@ -13,4 +13,5 @@ public class CustomErrorResponse {
     private LocalDateTime dateTime;
     private String message;
     private String details;
+    private String errorCode;
 }

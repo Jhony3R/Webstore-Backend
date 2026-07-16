@@ -41,6 +41,7 @@ public class UsuarioController {
         return ResponseEntity.ok(mapperUtil.map(obj, UsuarioDTO.class));
     }
 
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PostMapping
     public ResponseEntity<UsuarioResponse> save(@Valid @RequestBody UsuarioRequest dto) {
         Usuario obj = mapperUtil.map(dto, Usuario.class);
@@ -52,6 +53,7 @@ public class UsuarioController {
         return ResponseEntity.ok(mapperUtil.map(saved, UsuarioResponse.class));
     }
 
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioResponse> update(@PathVariable Integer id, @Valid @RequestBody UsuarioRequest dto) {
         Usuario existente = usuarioService.findById(id);
@@ -59,6 +61,7 @@ public class UsuarioController {
         existente.setNombreCompleto(dto.getNombreCompleto());
         existente.setEmail(dto.getEmail());
         existente.setRol(dto.getRol());
+        existente.setActivo(dto.isActivo());
 
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
             existente.setPassword(passwordEncoder.encode(dto.getPassword()));

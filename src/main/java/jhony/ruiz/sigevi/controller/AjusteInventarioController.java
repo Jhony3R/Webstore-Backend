@@ -1,22 +1,24 @@
 package jhony.ruiz.sigevi.controller;
 
 import jakarta.validation.Valid;
-import jhony.ruiz.sigevi.dto.AjusteInventarioDTO;
+import jhony.ruiz.sigevi.dto.AjusteInventario.AjusteInventarioDTO;
+import jhony.ruiz.sigevi.dto.AjusteInventario.AjusteInventarioRequestDTO;
 import jhony.ruiz.sigevi.model.AjusteInventario;
 import jhony.ruiz.sigevi.service.IAjusteInventarioService;
 import jhony.ruiz.sigevi.util.MapperUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/api/ajuste-inventario")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('ADMINISTRADOR')")
 public class AjusteInventarioController {
     private final IAjusteInventarioService ajusteInventarioService;
     private final MapperUtil mapperUtil;
@@ -34,17 +36,11 @@ public class AjusteInventarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> save(@Valid @RequestBody AjusteInventarioDTO dto) {
-        AjusteInventario obj = ajusteInventarioService.save(mapperUtil.map(dto, AjusteInventario.class));
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getIdAjusteInventario()).toUri();
-        return ResponseEntity.created(location).build();
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<AjusteInventarioDTO> update(@Valid @PathVariable("id") Integer id, @RequestBody AjusteInventarioDTO dto) {
-        dto.setIdAjusteInventario(id);
-        AjusteInventario obj = ajusteInventarioService.update(id, mapperUtil.map(dto, AjusteInventario.class));
-        return ResponseEntity.ok(mapperUtil.map(obj, AjusteInventarioDTO.class));
+    public ResponseEntity<AjusteInventarioDTO> save(@Valid @RequestBody AjusteInventarioRequestDTO request) {
+        AjusteInventario obj = ajusteInventarioService.registrarAjuste(request);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(obj.getIdAjusteInventario()).toUri();
+        return ResponseEntity.created(location).body(mapperUtil.map(obj, AjusteInventarioDTO.class));
     }
 
     @DeleteMapping("/{id}")
