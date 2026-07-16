@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -33,6 +34,9 @@ public class Compra {
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
+
+    @OneToMany(mappedBy="compra",cascade=CascadeType.ALL)
+    private List<DetalleCompra> detalles;
 
 
 }

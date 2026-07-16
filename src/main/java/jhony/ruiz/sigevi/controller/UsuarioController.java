@@ -41,6 +41,12 @@ public class UsuarioController {
         return ResponseEntity.ok(mapperUtil.map(obj, UsuarioDTO.class));
     }
 
+    @GetMapping("/username/{username}")
+    public ResponseEntity<UsuarioResponse> findByUsername(@PathVariable String username) {
+        Usuario usuario = usuarioService.findByUsername(username);
+        return ResponseEntity.ok(mapperUtil.map(usuario, UsuarioResponse.class));
+    }
+
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PostMapping
     public ResponseEntity<UsuarioResponse> save(@Valid @RequestBody UsuarioRequest dto) {

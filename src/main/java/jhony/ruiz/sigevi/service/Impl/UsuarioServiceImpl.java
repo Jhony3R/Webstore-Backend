@@ -1,5 +1,6 @@
 package jhony.ruiz.sigevi.service.Impl;
 
+import jhony.ruiz.sigevi.exception.Recursonoencontradoexception;
 import jhony.ruiz.sigevi.model.Usuario;
 import jhony.ruiz.sigevi.repository.IUsuarioRepository;
 import jhony.ruiz.sigevi.repository.IGenericRepo;
@@ -29,5 +30,11 @@ public class UsuarioServiceImpl extends CRUDImpl<Usuario, Integer> implements IU
         Usuario usuario = findById(id);
         usuario.setActivo(true);
         usuarioRepository.save(usuario);
+    }
+
+    @Override
+    public Usuario findByUsername(String username) {
+        return usuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new Recursonoencontradoexception("Usuario no encontrado: " + username));
     }
 }

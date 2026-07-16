@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -20,5 +21,7 @@ public class CompraDTO {
     private ProveedorDTO proveedor;
 
     private UsuarioDTO usuario;
+
+    private List<DetalleCompraDTO> detalles;
 
 }
